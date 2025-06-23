@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Quiz container */
+        #quiz-container {
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        /* Heading */
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Quiz questions */
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Options buttons */
+        .option {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.4);
+            transition: 0.3s;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .option:hover {
+            background: #ffffff;
+            color: #0072ff;
+            transform: scale(1.05);
+        }
+
+        /* Next button */
+        #next-btn {
+            margin-top: 20px;
+            padding: 12px 18px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        #next-btn:hover {
+            background: #d63e3e;
+            transform: scale(1.1);
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Interactive Quiz</h1>
+        <h2 id="question"></h2>
+        <div id="options"></div>
+        <button id="next-btn" onclick="nextQuestion()">Next</button>
+        <h3 id="result"></h3>
+    </div>
+    <script>
+        const quizData = [
+            { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: "Paris" },
+            { question: "Which programming language is used for web development?", options: ["Python", "C++", "JavaScript", "Java"], answer: "JavaScript" },
+            { question: "What is 5 + 3?", options: ["5", "8", "10", "15"], answer: "8" }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionEl = document.getElementById("question");
+            const optionsEl = document.getElementById("options");
+            const resultEl = document.getElementById("result");
+
+            questionEl.innerText = quizData[currentQuestion].question;
+            optionsEl.innerHTML = "";
+
+            quizData[currentQuestion].options.forEach(option => {
+                const button = document.createElement("button");
+                button.innerText = option;
+                button.classList.add("option");
+                button.onclick = () => checkAnswer(option);
+                optionsEl.appendChild(button);
+            });
+
+            resultEl.innerText = "";
+        }
+
+        function checkAnswer(selected) {
+            if (selected === quizData[currentQuestion].answer) {
+                score++;
+                document.getElementById("result").innerText = "✅ Correct!";
+            } else {
+                document.getElementById("result").innerText = "❌ Wrong!";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("quiz-container").innerHTML = `<h2>🎉 Quiz Completed!</h2><p>Your Score: ${score}/${quizData.length}</p>`;
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
